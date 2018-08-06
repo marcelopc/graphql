@@ -37,7 +37,13 @@ exports.default = (sequelize, DataTypes) => {
             beforeCreate: (user, options) => {
                 const salt = bcryptjs_1.genSaltSync();
                 user.password = bcryptjs_1.hashSync(user.password, salt);
-            }
+            },
+            beforeUpdate: (user, options) => {
+                if (user.changed('password')) {
+                    const salt = bcryptjs_1.genSaltSync();
+                    user.password = bcryptjs_1.hashSync(user.password, salt);
+                }
+            },
         }
     });
     User.prototype.isPassword = (encodedPassword, password) => {
