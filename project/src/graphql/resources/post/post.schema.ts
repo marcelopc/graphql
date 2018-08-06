@@ -8,7 +8,7 @@ type Post {
         createdAt: String!
         updatedAt: String!
         author: User!
-        comments: [ Comment! ]!
+        comments(first: Int, offset: Int): [ Comment! ]!
     }
 
     input PostInput {

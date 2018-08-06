@@ -6,6 +6,19 @@ import { UserInstance } from "../../../models/UserModel";
 
 
 export const userResolvers = {
+
+    User: {
+
+        posts:(user: UserInstance, { first = 10, offset = 0}, {db}: {db: DbConnection}, info: GraphQLResolveInfo) => {
+            return db.Post
+                .findAll({
+                    where: {author: user.get('id')},
+                    limit: first,
+                    offset: offset
+                })
+        }
+    },
+
     Query: {
 
         users: (parent, { first = 10, offset = 0}, {db}: {db: DbConnection}, info: GraphQLResolveInfo) => {
