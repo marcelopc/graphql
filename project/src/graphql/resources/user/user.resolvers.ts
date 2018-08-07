@@ -74,7 +74,7 @@ export const userResolvers = {
             }).catch(handleError);
         },
 
-        deleteUser:  (parent, {id}, {db}: {db: DbConnection}, info: GraphQLResolveInfo) => {
+        deleteUser:  (parent, { id }, {db}: {db: DbConnection}, info: GraphQLResolveInfo) => {
             id = parseInt(id);
             return db.sequelize.transaction((t: Transaction) => {
                 return db.User

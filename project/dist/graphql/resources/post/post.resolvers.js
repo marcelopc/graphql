@@ -24,7 +24,7 @@ exports.postResolvers = {
             }).catch(utils_1.handleError);
         },
         post: (parent, { id }, { db }, info) => {
-            id = parent(id);
+            id = parseInt(id);
             return db.Post
                 .findById(id)
                 .then((post) => {
