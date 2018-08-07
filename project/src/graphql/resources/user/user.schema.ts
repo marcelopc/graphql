@@ -1,5 +1,5 @@
 const userTypes = `
-    
+
     # User definition type
         type User {
             id: ID!

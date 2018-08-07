@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const userTypes = `
-    
+
     # User definition type
         type User {
             id: ID!

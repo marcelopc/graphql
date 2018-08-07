@@ -28,7 +28,8 @@ export const userResolvers = {
             }).catch(handleError);
         },
 
-        user: (parseNamedType, {id}, {db}: {db: DbConnection}, info) => {
+        user: (parent, {id}, {db}: {db: DbConnection}, info: GraphQLResolveInfo) => {
+            id = parseInt(id);
             return db.User
                 .findById(id)
                 .then((user: UserInstance) => {
@@ -39,7 +40,7 @@ export const userResolvers = {
         }
     },
 
-    Mutattion:{
+    Mutation:{
         createUser: (parent, {input}, {db}: {db: DbConnection}, info: GraphQLResolveInfo) => {
             return db.sequelize.transaction((t: Transaction) => {
                 return db.User.create(input, {transaction: t});

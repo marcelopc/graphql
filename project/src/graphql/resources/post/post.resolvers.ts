@@ -34,6 +34,7 @@ export const postResolvers = {
         },
 
         post: (parent, { id }, {db}: {db:DbConnection}, info: GraphQLResolveInfo) => {
+            id= parent(id);
             return db.Post
                 .findById(id)
                 .then((post: PostInstance) => {

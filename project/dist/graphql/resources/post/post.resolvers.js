@@ -24,6 +24,7 @@ exports.postResolvers = {
             }).catch(utils_1.handleError);
         },
         post: (parent, { id }, { db }, info) => {
+            id = parent(id);
             return db.Post
                 .findById(id)
                 .then((post) => {

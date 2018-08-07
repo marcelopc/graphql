@@ -19,7 +19,8 @@ exports.userResolvers = {
                 offset: offset
             }).catch(utils_1.handleError);
         },
-        user: (parseNamedType, { id }, { db }, info) => {
+        user: (parent, { id }, { db }, info) => {
+            id = parseInt(id);
             return db.User
                 .findById(id)
                 .then((user) => {
@@ -29,7 +30,7 @@ exports.userResolvers = {
             }).catch(utils_1.handleError);
         }
     },
-    Mutattion: {
+    Mutation: {
         createUser: (parent, { input }, { db }, info) => {
             return db.sequelize.transaction((t) => {
                 return db.User.create(input, { transaction: t });
