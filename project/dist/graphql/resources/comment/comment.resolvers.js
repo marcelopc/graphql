@@ -1,12 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const utils_1 = require("../../../utils/utils");
 exports.commentResolvers = {
     Comment: {
         user: (user, args, { db }, info) => {
-            return db.User.findById(user.get('user'));
+            return db.User.findById(user.get('user')).catch(utils_1.handleError);
         },
         post: (post, { postId, first = 10, offset = 0 }, { db }, info) => {
-            return db.Post.findById(post.get('user'));
+            return db.Post.findById(post.get('user')).catch(utils_1.handleError);
         },
     },
     Query: {
@@ -16,14 +17,15 @@ exports.commentResolvers = {
                 where: { post: postId },
                 limit: first,
                 offset: offset
-            });
+            })
+                .catch(utils_1.handleError);
         },
         Mutation: {
             createComment: (parent, { input }, { db }, info) => {
                 return db.sequelize.transaction((t) => {
                     return db.Comment
                         .create(input, { transaction: t });
-                });
+                }).catch(utils_1.handleError);
             },
             updateComment: (parent, { id, input }, { db }, info) => {
                 id = parseInt(id);
@@ -35,7 +37,7 @@ exports.commentResolvers = {
                             throw new Error(`Comment with id ${id} not found!`);
                         return comment.update(input, { transaction: t });
                     });
-                });
+                }).catch(utils_1.handleError);
             },
             deleteComment: (parent, { id }, { db }, info) => {
                 id = parseInt(id);
@@ -48,7 +50,7 @@ exports.commentResolvers = {
                         return comment.destroy({ transaction: t })
                             .then(comment => !!comment);
                     });
-                });
+                }).catch(utils_1.handleError);
             },
         }
     }

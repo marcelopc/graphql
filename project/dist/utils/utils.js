@@ -32,15 +32,6 @@ exports.onListening = (server) => {
 };
 exports.handleError = (error) => {
     let errorMessage = `${error.name}: ${error.message}`;
-    let env = process.env.NODE_ENV;
-    if (env !== 'test' && env !== 'pipelines') {
-        console.log(errorMessage);
-    }
+    console.log(errorMessage);
     return Promise.reject(new Error(errorMessage));
 };
-exports.throwError = (condition, message) => {
-    if (condition) {
-        throw new Error(message);
-    }
-};
-exports.JWT_SECRET = process.env.JWT_SECRET;
