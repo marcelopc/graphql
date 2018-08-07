@@ -3,18 +3,18 @@ import { GraphQLResolveInfo } from "graphql";
 import { DbConnection } from "../../../interfaces/DbConnectionInterface";
 import { Transaction } from "../../../../node_modules/@types/sequelize";
 import { CommentInstance } from "../../../models/CommentModel";
+import { handleError } from "../../../utils/utils";
 
 export const commentResolvers = {
 
     Comment: {
 
         user: (user, args, {db}: {db:DbConnection}, info: GraphQLResolveInfo) => {
-            return db.User.findById(user.get('user'))
+            return db.User.findById(user.get('user')).catch(handleError);
         },
 
         post: (post, { postId, first = 10, offset = 0 }, {db}: {db:DbConnection}, info: GraphQLResolveInfo) => {
-           return db.Post.findById(post.get('user'))
-
+           return db.Post.findById(post.get('user')).catch(handleError);
         },
     },
 
@@ -25,7 +25,8 @@ export const commentResolvers = {
                     where: {post: postId},
                     limit: first,
                     offset: offset
-                });
+                })
+            .catch(handleError);
         },
 
     Mutation: {
@@ -33,7 +34,7 @@ export const commentResolvers = {
             return db.sequelize.transaction((t: Transaction) => {
                 return db.Comment
                     .create(input, {transaction: t});
-            });
+            }).catch(handleError);
         },
 
         updateComment:(parent, { id, input }, {db}: {db:DbConnection}, info: GraphQLResolveInfo) => {
@@ -47,7 +48,7 @@ export const commentResolvers = {
                             throw new Error(`Comment with id ${id} not found!`);
                         return comment.update(input, {transaction: t});
                     });
-            });
+            }).catch(handleError);
         },
 
         deleteComment:(parent, { id }, {db}: {db:DbConnection}, info: GraphQLResolveInfo) => {
@@ -62,7 +63,7 @@ export const commentResolvers = {
                     return comment.destroy({transaction: t})
                         .then(comment => !!comment);
                 });
-            });
+            }).catch(handleError);
 
         },
     }
