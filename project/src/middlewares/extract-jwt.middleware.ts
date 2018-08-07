@@ -2,7 +2,6 @@ import * as jwt from 'jsonwebtoken';
 import db from './../models'
 import { RequestHandler, NextFunction, Response, Request } from "express";
 import { JWT_SECRET } from '../utils/utils';
-import { userInfo } from 'os';
 import { UserInstance } from '../models/UserModel';
 
 export const extractJwtMiddleware = (): RequestHandler => {
