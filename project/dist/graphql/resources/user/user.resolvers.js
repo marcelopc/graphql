@@ -5,34 +5,40 @@ const auth_resolver_1 = require("../../composable/auth.resolver");
 const utils_1 = require("../../../utils/utils");
 exports.userResolvers = {
     User: {
-        posts: (user, { first = 10, offset = 0 }, { db }, info) => {
+        posts: (user, { first = 10, offset = 0 }, { db, requestedFields }, info) => {
             return db.Post
                 .findAll({
                 where: { author: user.get('id') },
                 limit: first,
-                offset: offset
+                offset: offset,
+                attributes: requestedFields.getFields(info, { keep: ['id'], exclude: ['comments'] })
             }).catch(utils_1.handleError);
         }
     },
     Query: {
-        users: (parent, { first = 10, offset = 0 }, { db }, info) => {
+        users: (parent, { first = 10, offset = 0 }, { db, requestedFields }, info) => {
             return db.User.findAll({
                 limit: first,
-                offset: offset
+                offset: offset,
+                attributes: requestedFields.getFields(info, { keep: ['id'], exclude: ['posts'] })
             }).catch(utils_1.handleError);
         },
-        user: (parent, { id }, { db }, info) => {
+        user: (parent, { id }, { db, requestedFields }, info) => {
             id = parseInt(id);
             return db.User
-                .findById(id)
+                .findById(id, {
+                attributes: requestedFields.getFields(info, { keep: ['id'], exclude: ['posts'] })
+            })
                 .then((user) => {
                 utils_1.throwError(!user, `User with id ${id} not found!`);
                 return user;
             }).catch(utils_1.handleError);
         },
-        currentUser: composable_resolver_1.compose(...auth_resolver_1.authResolvers)((parent, args, { db, authUser }, info) => {
+        currentUser: composable_resolver_1.compose(...auth_resolver_1.authResolvers)((parent, args, { db, authUser, requestedFields }, info) => {
             return db.User
-                .findById(authUser.id)
+                .findById(authUser.id, {
+                attributes: requestedFields.getFields(info, { keep: ['id'], exclude: ['posts'] })
+            })
                 .then((user) => {
                 utils_1.throwError(!user, `User with id ${authUser.id} not found!`);
                 return user;
