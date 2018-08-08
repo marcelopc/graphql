@@ -3,7 +3,7 @@ import { AuthUser } from "./authUserInterface";
 
 export interface ResolverContext {
 
-     db?: DbConnection;
-     authorization?: string;
+    db?: DbConnection;
+    authorization?: string;
     authUser?: AuthUser;
 }

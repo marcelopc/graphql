@@ -58,7 +58,7 @@ export const commentResolvers = {
             }).catch(handleError);
         }),
 
-        deleteComment:compose(...authResolvers)((parent, { id }, {db, authUser}: {db:DbConnection, authUser: AuthUser}, info: GraphQLResolveInfo) => {
+        deleteComment: compose(...authResolvers)((parent, { id }, {db, authUser}: {db:DbConnection, authUser: AuthUser}, info: GraphQLResolveInfo) => {
             id = parseInt(id);
 
             return db.sequelize.transaction((t: Transaction) => {
