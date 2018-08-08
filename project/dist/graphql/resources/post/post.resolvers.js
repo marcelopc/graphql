@@ -5,8 +5,8 @@ const auth_resolver_1 = require("../../composable/auth.resolver");
 const utils_1 = require("../../../utils/utils");
 exports.postResolvers = {
     Post: {
-        author: (post, args, { db }, info) => {
-            return db.User.findById(post.get('author')).catch(utils_1.handleError);
+        author: (post, args, { db, dataloaders: { userLoader } }, info) => {
+            return userLoader.load(post.get('author')).catch(utils_1.handleError);
         },
         comments: (post, { first = 10, offset = 0 }, { db }, info) => {
             return db.Comment

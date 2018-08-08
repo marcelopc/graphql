@@ -5,11 +5,11 @@ const composable_resolver_1 = require("../../composable/composable.resolver");
 const auth_resolver_1 = require("../../composable/auth.resolver");
 exports.commentResolvers = {
     Comment: {
-        user: (user, args, { db }, info) => {
-            return db.User.findById(user.get('user')).catch(utils_1.handleError);
+        user: (comment, args, { db, dataloaders: { userLoader } }, info) => {
+            return userLoader.load(comment.get('user')).catch(utils_1.handleError);
         },
-        post: (post, { postId, first = 10, offset = 0 }, { db }, info) => {
-            return db.Post.findById(post.get('user')).catch(utils_1.handleError);
+        post: (comment, args, { db, dataloaders: { postLoader } }, info) => {
+            return postLoader.load(comment.get('post')).catch(utils_1.handleError);
         },
     },
     Query: {

@@ -7,14 +7,15 @@ import { PostInstance } from "../../../models/PostModel";
 import { Transaction } from "../../../../node_modules/@types/sequelize";
 import { handleError, throwError } from "../../../utils/utils";
 import { AuthUser } from "../../../interfaces/authUserInterface";
+import { DataLoaders } from "../../../interfaces/dataLoadersInterface";
 
 
 export const postResolvers = {
 
     Post: {
 
-        author: (post, args, {db}: {db:DbConnection}, info: GraphQLResolveInfo) => {
-            return db.User.findById(post.get('author')).catch(handleError);
+        author: (post, args, {db, dataloaders: {userLoader}}: {db:DbConnection, dataloaders: DataLoaders }, info: GraphQLResolveInfo) => {
+            return userLoader.load(post.get('author')).catch(handleError);
         },
 
         comments: (post, { first = 10, offset = 0 }, {db}: {db:DbConnection}, info: GraphQLResolveInfo) => {
