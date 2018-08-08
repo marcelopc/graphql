@@ -15,7 +15,6 @@ type Post {
         title: String!
         content: String!
         photo: String!
-        author: Int!
     }
 `;
 

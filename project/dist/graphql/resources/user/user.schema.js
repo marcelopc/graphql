@@ -33,6 +33,7 @@ exports.userTypes = userTypes;
 const userQueries = `
     users(first: Int, offset: Int): [ User! ]!
     user(id: ID!): User
+    currentUser: User
 `;
 exports.userQueries = userQueries;
 const userMutations = `
